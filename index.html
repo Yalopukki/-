@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music QR</title>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 16px;
+        }
+        button {
+            margin-top: 16px;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Музыка играет...</h1>
+
+        <!-- Плеер: autoplay + playsinline для мобилок -->
+        <audio id="player" autoplay playsinline>
+            <source src="harry-styles-watermelon-sugar.mp3" type="audio/mpeg" />
+        </audio>
+
+        <p id="status">Пробую запустить музыку автоматически...</p>
+        <button id="playBtn">Включить звук</button>
+    </div>
+
+    <script>
+        const audio = document.getElementById('player');
+        const btn = document.getElementById('playBtn');
+        const status = document.getElementById('status');
+
+        function tryPlay() {
+            audio.play().then(() => {
+                status.textContent = 'Музыка должна играть.';
+            }).catch(() => {
+                status.textContent = 'Браузер заблокировал автозапуск. Нажми кнопку ниже.';
+            });
+        }
+
+        // Первая попытка сразу после загрузки DOM
+        document.addEventListener('DOMContentLoaded', tryPlay);
+
+        // Вторая попытка через 0.5 сек — если файл не успел загрузиться
+        setTimeout(tryPlay, 500);
+
+        // Явный запуск по кнопке — на случай жёсткой блокировки
+        btn.addEventListener('click', () => {
+            audio.play().then(() => {
+                status.textContent = 'Музыка играет.';
+            }).catch(() => {
+                status.textContent = 'Не удалось запустить плеер.';
+            });
+        });
+    </script>
+</body>
+</html>
